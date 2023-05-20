@@ -7,6 +7,6 @@ import java.io.Serializable;
  */
 
 
-public record ResponseWrapper<T extends ParentModel>(Integer status, String message) implements Serializable {
+public record ErrorResponse(Integer status, String message) implements Serializable {
 
 }
