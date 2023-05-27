@@ -6,6 +6,7 @@ import com.web.flux.mongo.model.Rating;
 import com.web.flux.mongo.repository.ReactiveMovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,13 +24,14 @@ import java.util.Objects;
 public class MovieService {
 
     private final ReactiveMovieRepository reactiveMovieRepository;
+    private final ReactiveMongoTemplate reactiveMongoTemplate;
 
     public Mono<Movie> saveMovie(Movie movie) {
         return reactiveMovieRepository.save(movie);
     }
 
     public Flux<Movie> saveMovies(List<Movie> movies) {
-
+        return reactiveMongoTemplate.insertAll(Mono.just(movies), Movie.class).doOnError(throwable -> log.error("error inserting {}",throwable.getMessage()));
     }
 
     public Mono<Movie> findById(String id) {
