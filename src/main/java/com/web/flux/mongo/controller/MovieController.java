@@ -42,13 +42,28 @@ public class MovieController {
 
 
     @PutMapping("/update/{id}")
-    public Mono<Movie> update(@PathVariable String id,@RequestBody Movie movie) {
-        return movieService.update(id,movie);
+    public Mono<Movie> update(@PathVariable String id, @RequestBody Movie movie) {
+        return movieService.update(id, movie);
     }
 
     @GetMapping("/getMovieRatings/{id}")
     public Flux<Rating> findAll(@PathVariable String id) {
         return movieService.getMovieRatings(id);
+    }
+
+    @DeleteMapping("/directDelete/{id}")
+    public Mono<Void> directDelete(@PathVariable String id) {
+        return this.movieService.directDelete(id);
+    }
+
+    @DeleteMapping("/findAndDelete/{id}")
+    public Mono<Void> findAndDelete(@PathVariable String id) {
+        return this.movieService.findAndDelete(id);
+    }
+
+    @DeleteMapping("/findAndDeleteMongoTemplate/{id}")
+    public Flux<Movie> findAndDeleteMongoTemplate(@PathVariable String id) {
+        return this.movieService.findAndDeleteMongoTemplate(id);
     }
 
 }

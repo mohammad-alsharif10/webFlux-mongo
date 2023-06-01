@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import reactor.core.publisher.Mono;
 
+import static com.web.flux.mongo.util.Constants.BULK_INSERT_EXCEPTION;
 import static com.web.flux.mongo.util.Constants.RECORD_NOT_FOUND_EXCEPTION;
 
 /**
@@ -21,6 +22,12 @@ public class ExceptionHandlerController {
     public Mono<ErrorResponse> recordNotFound(RecordNotFoundException recordNotFoundException) {
         log.error(RECORD_NOT_FOUND_EXCEPTION, recordNotFoundException);
         return Mono.just(new ErrorResponse(HttpStatus.NOT_FOUND.value(), recordNotFoundException.getMessage()));
+    }
+
+    @ExceptionHandler(BulkInsertException.class)
+    public Mono<ErrorResponse> bulkInsert(BulkInsertException bulkInsertException) {
+        log.error(BULK_INSERT_EXCEPTION, bulkInsertException);
+        return Mono.just(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), bulkInsertException.getMessage()));
     }
 
 }
